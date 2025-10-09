@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ru" data-theme="shire">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0a07" />
+  <title>Александр Елфимов — Аналитик • Middle‑earth Edition</title>
+  <meta name="description" content="Аналитик данных / BI. Портфолио в эстетике Властелина колец: опыт, кейсы, навыки, PDF, контакты." />
+
+  <!-- Fav / OG -->
+  <link rel="icon" type="image/svg+xml" href="assets/icons/ring.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Александр Елфимов — Аналитик / BI" />
+  <meta property="og:description" content="Опыт, кейсы, навыки, PDF и контакты. ЛОР‑тематика, премиальные анимации." />
+  <meta property="og:image" content="assets/img/og-cover.jpg" />
+
+  <!-- Google fallback fonts (на случай, если локальные не загрузятся) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  <!-- Local fonts preload (GH Pages-friendly relative paths) -->
+  <link rel="preload" as="font" href="fonts/Ringbearer.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="fonts/SauronKing.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="fonts/ElvishRingNFI.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="fonts/FlareSerif821.woff2" type="font/woff2" crossorigin>
+  <!-- Аватар (preload) -->
+  <link rel="preload" as="image" href="assets/img/%D1%81%D0%B0%D0%BD%D1%8F%20%D0%B2%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D0%BB%D0%B8%D0%BD%20%D0%BA%D0%BE%D0%BB%D0%B5%D1%86.png">
+  <link rel="preload" as="image" href="assets/img/саня%20властелин%20колец.png">
+
+  <style>
+    :root{
+      /* THEME variables */
+      --bg:#0b0a07; --paper:#12100e; --ink:#f8ebcc; --muted:#c7bb9b; --accent:#d1a954; --accent-2:#6b8f57; --line:rgba(209,169,84,.5);
+      --ring:#ffcc44; --soft:cubic-bezier(.25,.1,.25,1); --radius:18px; --nav-h:72px; --shadow:0 10px 40px rgba(0,0,0,.35);
+      --pre-scroll:url('assets/img/pergament-scroll.png');
+    }
+    html[data-theme="mordor"]{
+      --bg:#050505; --paper:#0b0a07; --ink:#eadfc9; --muted:#b3a88d; --accent:#f39c12; --accent-2:#9b2915; --line:rgba(243,156,18,.35); --ring:#ffa300;
+    }
+
+    /* Fonts */
+    @font-face{font-family:'Ringbearer';src:url('fonts/Ringbearer.woff2') format('woff2'),url('fonts/Ringbearer.woff') format('woff');font-display:swap}
+    @font-face{font-family:'SauronKing';src:url('fonts/SauronKing.woff2') format('woff2'),url('fonts/SauronKing.woff') format('woff');font-display:swap}
+    @font-face{font-family:'ElvishRingNFI';src:url('fonts/ElvishRingNFI.woff2') format('woff2'),url('fonts/ElvishRingNFI.woff') format('woff');font-display:swap}
+    @font-face{font-family:'FlareSerif821';src:url('fonts/FlareSerif821.woff2') format('woff2'),url('fonts/FlareSerif821.woff') format('woff');font-display:swap}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Inter, FlareSerif821, serif;letter-spacing:.2px;overflow-x:hidden;padding-top:var(--nav-h)}
+    a{color:var(--accent);text-decoration:none}
+    img{display:block;max-width:100%}
+    .container{width:min(1120px,92vw);margin:0 auto}
+
+    /* BACKGROUND — вернули как было: без фототекстур */
+    .texture{position:fixed;inset:0;pointer-events:none;z-index:-2;
+      background-image:radial-gradient(1400px 900px at 50% -10%, rgba(209,169,84,.08),transparent 60%),
+                       radial-gradient(900px 700px at 80% 120%, rgba(107,143,87,.06),transparent 60%);
+      background-size:cover; background-blend-mode:multiply; opacity:.9}
+    .vignette{position:fixed; inset:0; pointer-events:none; z-index:-1; background:radial-gradient(1200px 900px at 50% 10%, transparent 60%, rgba(0,0,0,.35) 100%)}
+    .noise{position:fixed; inset:0; pointer-events:none; opacity:.08; mix-blend-mode:soft-light; z-index:-1;
+      background-image:repeating-radial-gradient(circle at 20% 30%, rgba(255,255,255,.06) 0 2px, transparent 2px 6px),
+                       repeating-radial-gradient(circle at 80% 70%, rgba(0,0,0,.08) 0 2px, transparent 2px 6px)}
+
+    /* Nav */
+    .nav{position:fixed; inset:0 0 auto 0; z-index:40; backdrop-filter:blur(8px);
+      background:linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.0)); border-bottom:1px solid var(--line)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0}
+    .logo{display:flex; gap:12px; align-items:center}
+    .mark{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:12px; border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.25))}
+    .brand{font:700 20px/1 Ringbearer, Cinzel, serif; letter-spacing:.03em}
+    .menu{display:flex; gap:20px; align-items:center}
+    .menu a{color:var(--ink); font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.35)}
+    .menu a:hover{filter:brightness(1.1)}
+    .menu-toggle{display:none; background:transparent; border:1px solid var(--line); border-radius:12px; padding:8px 12px; color:var(--ink)}
+
+    /* Buttons */
+    .cta{--pad:10px 14px; display:inline-flex; align-items:center; gap:10px; padding:var(--pad); border-radius:14px; border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3)); box-shadow:var(--shadow); position:relative; overflow:hidden; color:var(--ink)}
+    .cta span{font-weight:900; letter-spacing:.2px; color:var(--ink); text-shadow:0 1px 0 rgba(0,0,0,.6)}
+    .cta::after{content:""; position:absolute; inset:0; background:radial-gradient(600px 160px at var(--mx,50%) -20%, rgba(209,169,84,.35), transparent 60%); transition:220ms ease; pointer-events:none}
+    .ghost{padding:10px 14px; border-radius:14px; border:1px dashed var(--line); color:var(--ink); text-shadow:0 1px 0 rgba(0,0,0,.5)}
+    @media (max-width:960px){ .menu{display:none; position:fixed; left:max(4vw,12px); right:max(4vw,12px); top:calc(var(--nav-h) - 8px);
+      padding:14px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.2)); box-shadow:var(--shadow); gap:10px; flex-direction:column; z-index:41}
+      .menu-toggle{display:inline-flex} body.menu-open{overflow:hidden}}
+
+    /* Hero */
+    .hero{position:relative; padding:96px 0 40px; border-bottom:1px solid var(--line);
+      background:radial-gradient(1200px 600px at 50% 0%, rgba(209,169,84,.12), transparent 70%)}
+    .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
+    .lead{display:inline-block; color:var(--ink); font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.5)}
+    .title{font:800 clamp(28px,6vw,56px)/1.1 Ringbearer, Cinzel, serif; letter-spacing:.02em; margin:.25em 0 .35em}
+    .subtitle{font:700 clamp(15px,2.1vw,19px)/1.5 FlareSerif821, Inter, serif; color:var(--ink); opacity:.9; text-shadow:0 1px 0 rgba(0,0,0,.5)}
+    .motto{margin:8px 0 0; font-family:ElvishRingNFI, Cinzel, serif; letter-spacing:.08em; color:var(--accent); opacity:.95; text-shadow:0 0 18px rgba(209,169,84,.35)}
+    .hero-cta{display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 0}
+
+    /* Portrait — без наложений */
+    .portrait-card{position:relative; border:1px solid var(--line); border-radius:18px; padding:10px; background:rgba(0,0,0,.12); box-shadow:var(--shadow); align-self:start}
+    .portrait-wrap{overflow:hidden; border-radius:14px; aspect-ratio:4/5; background:#000}
+    .portrait{width:100%; height:100%; object-fit:cover; filter:none}
+
+    /* KPI */
+    .grid{display:grid; gap:18px}
+    .grid.cols-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .kpi{display:grid; place-items:center; gap:6px; padding:16px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.22)); box-shadow:var(--shadow)}
+    .kpi .num{font:900 clamp(20px,3.4vw,30px)/1 Ringbearer, Cinzel, serif; color:var(--accent)}
+    .kpi .cap{color:var(--ink); font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,.5)}
+
+    /* Sections */
+    section[id]{scroll-margin-top:calc(var(--nav-h) + 12px)}
+    .section{padding:70px 0; border-bottom:1px solid var(--line)}
+    .h2{font:800 clamp(22px,3.2vw,32px)/1.2 SauronKing, Ringbearer, Cinzel, serif; margin:0 0 14px; color:var(--accent); text-shadow:0 0 12px rgba(209,169,84,.25)}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.22)); border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+    .p{color:var(--ink); opacity:.95; text-shadow:0 1px 0 rgba(0,0,0,.45)}
+    .muted{color:var(--muted)}
+
+    /* Runes band */
+    .runes{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15)); padding:18px 0; text-align:center}
+    .runes .inner{font-family:ElvishRingNFI, Cinzel, serif; letter-spacing:.08em; color:var(--accent); text-shadow:0 0 16px rgba(209,169,84,.35); font-size:clamp(18px,2.6vw,28px)}
+
+    /* Timeline */
+    .timeline{position:relative; padding-left:26px}
+    .timeline::before{content:""; position:absolute; left:9px; top:0; bottom:0; width:2px; background:linear-gradient(180deg, var(--accent), transparent)}
+    .milestone{position:relative; margin:12px 0; padding:14px 16px; border:1px dashed var(--line); border-radius:14px}
+    .milestone::before{content:""; position:absolute; left:-22px; top:16px; width:10px; height:10px; border-radius:50%; background:var(--bg); border:2px solid var(--accent); box-shadow:0 0 0 4px rgba(209,169,84,.18)}
+    .when{font:800 12px/1.1 FlareSerif821, Inter, serif; color:var(--muted); letter-spacing:.3px; text-transform:uppercase}
+
+    /* Skill bars */
+    .bars{display:grid; gap:10px}
+    .bar{height:10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.08); overflow:hidden}
+    .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--accent-2), var(--accent)); box-shadow:0 0 16px rgba(209,169,84,.35) inset; transition:width 900ms ease}
+
+    /* Parallax stencils */
+    .parallax{position:fixed; inset:0; pointer-events:none; opacity:.32; z-index:-3}
+    .p-layer{position:absolute; max-width:60vw; filter:drop-shadow(0 6px 20px rgba(0,0,0,.35)); will-change:transform}
+    .p-layer.leaves{right:-6vw; top:-4vh; width:42vw; opacity:.5}
+    .p-layer.map{left:-8vw; bottom:-6vh; width:52vw; opacity:.38}
+
+    /* Preloader with scroll texture */
+    .preloader{position:fixed; inset:0; z-index:60; display:grid; place-items:center; background:radial-gradient(1200px 700px at 50% -10%, rgba(209,169,84,.1), transparent 70%), #0b0a07; transition:opacity .7s var(--soft), visibility .7s var(--soft)}
+    .preloader.hidden{opacity:0; visibility:hidden; pointer-events:none}
+    .scroll-skin{position:absolute; width:min(90vw, 880px); aspect-ratio:3/2; background:var(--pre-scroll) center/cover no-repeat; border:1px solid var(--line); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.5); filter:sepia(.3) contrast(1.05) saturate(1.1)}
+    .scroll-img{position:absolute; width:min(94vw, 920px); height:auto; opacity:.95; filter:drop-shadow(0 10px 40px rgba(0,0,0,.5))}
+    .ring-wrap{position:relative; width:min(46vh,480px); aspect-ratio:1/1; filter:drop-shadow(0 20px 40px rgba(209,169,84,.25))}
+    .ring{width:100%; height:100%}
+    .ring .gold{stroke:url(#gold); stroke-width:18; fill:none}
+    .ring .text{font-family:ElvishRingNFI, Cinzel, serif; fill:var(--ring); font-size:22px; letter-spacing:.06em}
+    .ring-rot{animation:spin 9s linear infinite; transform-origin:50% 50%}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .progress{position:absolute; inset:auto 0 5%; display:grid; place-items:center; text-align:center}
+    .progress .bar{width:260px; height:7px; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin:12px auto 8px; background:rgba(255,255,255,.08)}
+    .progress .bar>i{display:block; height:100%; width:0%; background:linear-gradient(90deg, rgba(209,169,84,.15), rgba(209,169,84,.6)); box-shadow:0 0 16px rgba(209,169,84,.45) inset; transition:width .3s var(--soft)}
+    .progress .label{color:var(--ink); font:800 14px/1 FlareSerif821, Inter, serif; text-shadow:0 1px 0 rgba(0,0,0,.6)}
+
+    /* Reveal */
+    .reveal{opacity:0; transform:translateY(12px); transition:opacity .6s var(--soft), transform .6s var(--soft)}
+    .reveal-visible{opacity:1; transform:none}
+
+    /* Footer */
+    footer{padding:50px 0}
+
+    /* Back to top */
+    .scroll-top{ position:fixed; right:16px; bottom:16px; border:none; border-radius:12px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3)); border:1px solid var(--line); color:var(--ink); box-shadow: var(--shadow); cursor:pointer; opacity:0; visibility:hidden; transform:translateY(8px); transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index:65; }
+    .scroll-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+
+    /* Music control (как на референсе) */
+    .music-control{ position:fixed; left:16px; bottom:16px; border:none; border-radius:12px; padding:10px 12px; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3)); border:1px solid var(--line); color:var(--ink); box-shadow: var(--shadow); cursor:pointer; z-index:66; display:flex; align-items:center; gap:8px; }
+    .music-control.muted{ opacity:.75 }
+    .music-control .music-icon{ opacity:.9 }
+
+    @media (max-width:860px){ .hero-grid{grid-template-columns:1fr} .portrait-card{max-width:420px; margin:0 auto} }
+  </style>
+</head>
+<body>
+  <!-- Parallax stencils (LotR aesthetic) -->
+  <div class="parallax" aria-hidden="true">
+    <img class="p-layer leaves" src="assets/stencils/leaves.svg" alt="" />
+    <img class="p-layer map" src="assets/stencils/map.svg" alt="" />
+  </div>
+
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader" aria-label="Загрузка">
+    <div class="scroll-skin" aria-hidden="true"></div>
+    <img class="scroll-img" src="assets/img/pergament-scroll.png" alt="" onerror="this.style.display='none'" />
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 600 600" aria-hidden="true">
+        <defs>
+          <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7a5b1c"/>
+            <stop offset="40%" stop-color="#d1a954"/>
+            <stop offset="70%" stop-color="#f7d77a"/>
+            <stop offset="100%" stop-color="#7a5b1c"/>
+          </linearGradient>
+          <path id="circle" d="M300,40 a260,260 0 1,1 0,520 a260,260 0 1,1 0,-520"/>
+        </defs>
+        <circle cx="300" cy="300" r="260" class="gold ring-rot" />
+        <text class="text"><textPath href="#circle" startOffset="0%" class="ring-rot">Ash nazg durbatulûk • ash nazg gimbatul • ash nazg thrakatulûk • agh burzum‑ishi krimpatul • </textPath></text>
+      </svg>
+      <div class="progress">
+        <div class="bar" aria-hidden="true"><i id="progressBar"></i></div>
+        <div class="label"><span id="progressNum">0</span>% — Куется ваше Кольцо</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" role="navigation">
+    <div class="container nav-inner">
+      <a href="#top" class="logo" aria-label="На главную">
+        <span class="mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8" stroke-width="1.5"/><path d="M12 4a8 8 0 0 1 0 16" stroke-width="1.5"/></svg>
+        </span>
+        <strong class="brand">A. Elfimov</strong>
+      </a>
+      <button class="menu-toggle" aria-label="Меню" aria-controls="menu" aria-expanded="false" onclick="toggleMenu(this)">Меню</button>
+      <div class="menu" id="menu">
+        <a href="#about" onclick="closeMenu()">Обо мне</a>
+        <a href="#experience" onclick="closeMenu()">Опыт</a>
+        <a href="#cases" onclick="closeMenu()">Кейсы</a>
+        <a href="#skills" onclick="closeMenu()">Навыки</a>
+        <a href="#education" onclick="closeMenu()">Обучение</a>
+        <a href="#contacts" onclick="closeMenu()">Контакты</a>
+        <button class="cta" id="themeToggle" type="button" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Тема: Shire</span></button>
+        <!-- удалили кнопку звука из меню -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- AUDIO (Мория) -->
+  <audio id="bgAudio" preload="metadata" loop playsinline>
+    <source src="assets/audio/the_lord_of_the_rings_03 - Concerning Hobbits.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- HERO -->
+  <header id="top" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="lead">Санкт‑Петербург • Гибрид/удалённо</span>
+        <h1 class="title">Александр Елфимов — Аналитик данных / BI</h1>
+        <p class="subtitle">Excel/Power BI, Python/SQL, прогнозирование и фактор‑анализ. Собираю понятные дашборды и модели для решений бизнеса.</p>
+        <div class="motto">‹ ᛟ ᚠ ᚱ ᛟ ᚷ ᛁ ᚾ ᚷ ᛫ ᛟ ᚾ ᛖ ᛫ ᛟ ᚾ ᛖ ᛫ ᚱ ᛁ ᚾ ᚷ ᛫ ᛋ ᛁ ᚷ ᚾ ᛋ ›</div>
+        <div class="hero-cta">
+          <a class="cta" href="mailto:lucius.haze@mail.ru" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Написать на Email</span></a>
+          <a class="ghost" href="#cv-viewer">Посмотреть резюме (PDF)</a>
+        </div>
+        <div class="grid cols-4" style="margin-top:18px">
+          <div class="kpi reveal"><div class="num">12+</div><div class="cap">отчётов в проде</div></div>
+          <div class="kpi reveal"><div class="num">8</div><div class="cap">дашбордов</div></div>
+          <div class="kpi reveal"><div class="num">5</div><div class="cap">моделей прогноза</div></div>
+          <div class="kpi reveal"><div class="num">C1</div><div class="cap">английский</div></div>
+        </div>
+      </div>
+      <aside class="portrait-card reveal" aria-label="Портрет">
+        <div class="portrait-wrap">
+          <img class="portrait" id="portrait" alt="Портрет без эффектов" src="assets/img/portrait-fallback.jpg" data-preload>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <!-- RUNES BAND -->
+  <section class="runes" aria-hidden="true">
+    <div class="inner">‹ ᛟ ᚠ ᚱ ᛟ ᚷ ᛁ ᚾ ᚷ ᛫ ᛟ ᚾ ᛖ ᛫ ᛟ ᚾ ᛖ ᛫ ᚱ ᛁ ᚾ ᚷ ᛫ ᛋ ᛁ ᚷ ᚾ ᛋ ›</div>
+  </section>
+
+  <!-- QUICK CONTACTS -->
+  <section class="section" aria-labelledby="contacts-quick">
+    <div class="container">
+      <h2 class="h2" id="contacts-quick">Контакты одним взглядом</h2>
+      <div class="grid cols-4" style="margin-top:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <a class="cta" href="tel:+79818353073" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>+7 (981) 835‑30‑73</span></a>
+        <a class="cta" href="mailto:lucius.haze@mail.ru" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>lucius.haze@mail.ru</span></a>
+        <div class="cta" style="cursor:default"><span>Санкт‑Петербург</span></div>
+        <a class="cta" href="https://t.me/persiknalune_official" target="_blank" rel="noopener" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>@persiknalune_official</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="h2">Обо мне</h2>
+      <p class="p">Аналитик данных с упором на Excel/Power BI и Python/SQL. Люблю аккуратные модели, проверяемые гипотезы и понятные дашборды, которые помогают бизнесу принимать решения. Готов к гибкому графику и проектной работе. Есть РВП (разрешение на временное проживание).</p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section">
+    <div class="container">
+      <h2 class="h2">Опыт</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin-top:6px">
+        <div class="card reveal">
+          <div class="when">Июн–Июл 2025 • Санкт‑Петербург</div>
+          <div class="p" style="font-weight:800">Мэлон Фэшн Груп — Младший бизнес‑аналитик</div>
+          <ul class="muted">
+            <li>Выгрузка из 1С и обновление Excel‑отчётов по продажам, марже, каналам сбыта.</li>
+            <li>Excel‑дашборды (Power Query/Power Pivot) на данных из 1С, DWH и Data Lens.</li>
+            <li>Дашборд в Yandex Data Lens: подготовка данных, визуализации, мониторинг.</li>
+            <li>Ежедневные отчёты по план/факт и KPI; прогнозы продаж/выручки/маржи.</li>
+            <li>Фактор‑анализ выручки, маржи, валового дохода.</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <div class="when">Ноя 2024 – Фев 2025 • Москва</div>
+          <div class="p" style="font-weight:800">Технологии Доверия — Associate/Аналитик (ГУК)</div>
+          <ul class="muted">
+            <li>Модель динамического баланса для казначейства ТОП‑5 банка: прогноз портфеля, сценарии.</li>
+            <li>Excel‑модели и структура данных для ежедневной работы казначейства.</li>
+            <li>Согласование требований к данным, контроль целостности при масштабировании.</li>
+            <li>Интеграция недостающих элементов данных; презентации результатов.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section id="cases" class="section">
+    <div class="container">
+      <h2 class="h2">Кейсы</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:6px">
+        <article class="card reveal"><div class="p" style="font-weight:800">Автоматизация отчётности в Excel/Power Query</div><p class="muted">Сократил ручной труд на 60% за счёт параметризованных запросов и Power Pivot.</p></article>
+        <article class="card reveal"><div class="p" style="font-weight:800">Прогнозирование продаж</div><p class="muted">Модель прогнозов по брендам и каналам сбыта; качество MAPE ≤ 12%.</p></article>
+        <article class="card reveal"><div class="p" style="font-weight:800">Дашборд в Data Lens</div><p class="muted">Подключение к витрине, расчётные поля, регулярный мониторинг KPI.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section">
+    <div class="container">
+      <h2 class="h2">Навыки</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin-top:8px">
+        <div class="card reveal">
+          <div class="p" style="font-weight:800">Core</div>
+          <div class="bars" style="margin-top:10px">
+            <div class="muted">Excel / Power Query</div>
+            <div class="bar"><i data-w="92"></i></div>
+            <div class="muted" style="margin-top:8px">Power BI</div>
+            <div class="bar"><i data-w="86"></i></div>
+            <div class="muted" style="margin-top:8px">Python</div>
+            <div class="bar"><i data-w="78"></i></div>
+            <div class="muted" style="margin-top:8px">SQL</div>
+            <div class="bar"><i data-w="82"></i></div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="p" style="font-weight:800">Инструменты</div>
+          <div class="bars" style="margin-top:10px">
+            <div class="muted">Data Lens</div>
+            <div class="bar"><i data-w="80"></i></div>
+            <div class="muted" style="margin-top:8px">Confluence / 1С / CRM</div>
+            <div class="bar"><i data-w="74"></i></div>
+            <div class="muted" style="margin-top:8px">Статистика / моделирование</div>
+            <div class="bar"><i data-w="76"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); margin-top:12px">
+        <div class="cta" style="cursor:default"><span>Power Pivot</span></div>
+        <div class="cta" style="cursor:default"><span>ETL</span></div>
+        <div class="cta" style="cursor:default"><span>Фактор‑анализ</span></div>
+        <div class="cta" style="cursor:default"><span>Визуализация</span></div>
+        <div class="cta" style="cursor:default"><span>Предиктив</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="section">
+    <div class="container">
+      <h2 class="h2">Образование и курсы</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin-top:8px">
+        <div class="card reveal"><div class="p" style="font-weight:800">Образование</div>
+          <ul class="muted"><li><strong>НИУ ВШЭ (Москва)</strong> — бакалавр экономики, 2024</li></ul>
+        </div>
+        <div class="card reveal"><div class="p" style="font-weight:800">Курсы</div>
+          <ul class="muted"><li>Power BI / Data Lens — практические кейсы</li><li>Python для анализа данных</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS / PDF -->
+  <section id="contacts" class="section">
+    <div class="container">
+      <h2 class="h2">Контакты</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin-top:12px">
+        <div class="card reveal">
+          <div class="p" style="font-weight:800">Свяжитесь</div>
+          <p class="muted">Обсудим цели и план внедрения аналитики.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin:10px 0 14px">
+            <a class="cta" href="tel:+79818353073" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Позвонить</span></a>
+            <a class="cta" href="mailto:lucius.haze@mail.ru" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Написать Email</span></a>
+            <a class="cta" href="https://t.me/persiknalune_official" target="_blank" rel="noopener" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Telegram</span></a>
+          </div>
+          <p class="muted small">Форматы: полная/частичная занятость, проектная работа.</p>
+        </div>
+        <div class="card reveal">
+          <div class="p" style="font-weight:800">Резюме (PDF)</div>
+          <p class="p">Скачать полную версию резюме.</p>
+          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" download onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
+          <div style="margin-top:10px"><a class="ghost" href="#cv-viewer">Открыть в окне</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PDF VIEWER OVERLAY -->
+  <section id="cv-viewer" hidden aria-hidden="true" style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.7);backdrop-filter:blur(4px)">
+    <div class="container" style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:10px;padding:20px">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+        <div class="h2">Резюме (PDF)</div>
+        <div style="display:flex;gap:8px">
+          <a class="cta" href="assets/cv.pdf" download><span>Скачать</span></a>
+          <button class="cta" id="closeCv"><span>Закрыть</span></button>
+        </div>
+      </div>
+      <iframe src="assets/cv.pdf" title="Резюме PDF" style="width:100%;height:100%;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:18px;align-items:flex-end;flex-wrap:wrap">
+      <div>
+        <strong>Александр Елфимов</strong>
+        <p class="muted small">Аналитик данных / BI. Excel, Power BI, Python, SQL.</p>
+      </div>
+      <div class="muted small" style="text-align:right">
+        © <span id="year"></span> A. Elfimov<br/>
+        Produced by <a href="https://t.me/Ka_yooo_ma" target="_blank" rel="noopener" style="color:var(--ink); text-decoration:underline">Sultonov Komil G'ayrat o'g'li</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Кнопка музыки как на референсе (фиксированная, слева снизу) -->
+  <button id="musicControl" class="music-control muted" aria-label="Управление музыкой">
+    <svg class="music-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path d="M9 18V5l12-2v13"></path>
+      <circle cx="6" cy="18" r="3"></circle>
+      <circle cx="18" cy="16" r="3"></circle>
+    </svg>
+    <span>Музыка</span>
+  </button>
+
+  <button id="scrollTopBtn" class="scroll-top" aria-label="Наверх" title="Наверх">⬆︎</button>
+
+  <div class="texture" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <script>
+    // Helpers
+    function btnHover(e){ const r=e.currentTarget.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width*100).toFixed(2)+'%'; e.currentTarget.style.setProperty('--mx',x); }
+    function btnLeave(e){ e.currentTarget.style.removeProperty('--mx'); }
+    function el(id){ return document.getElementById(id) }
+
+    // Mobile menu
+    function toggleMenu(btn){ const m=el('menu'); const open=m.classList.toggle('open'); document.body.classList.toggle('menu-open', open); btn.setAttribute('aria-expanded', open); setNavHeightVar(); }
+    function closeMenu(){ const m=el('menu'); m.classList.remove('open'); document.body.classList.remove('menu-open'); setNavHeightVar(); }
+
+    // Reserve nav height
+    function setNavHeightVar(){ const nav=document.querySelector('.nav'); if(!nav) return; document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px'); }
+    document.addEventListener('DOMContentLoaded', setNavHeightVar); addEventListener('resize', setNavHeightVar);
+
+    // Theme toggle — заметнее отличия (фон/чернила)
+    const themeToggle = el('themeToggle');
+    const applyTheme = (t)=>{ document.documentElement.setAttribute('data-theme', t); themeToggle.querySelector('span').textContent = 'Тема: ' + (t==='mordor'?'Mordor':'Shire'); localStorage.setItem('lotr:theme', t); };
+    applyTheme(localStorage.getItem('lotr:theme')||'shire');
+    themeToggle.addEventListener('click', ()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='mordor'?'shire':'mordor'); });
+
+    // Robust PRELOADER (anti-freeze)
+    const pre = el('preloader'); const bar = el('progressBar'); const num = el('progressNum');
+    const preloadables = Array.from(document.querySelectorAll('[data-preload]'));
+    let loaded=0, visualP=0, hidden=false;
+    function setProgress(p){ visualP=Math.max(visualP,p); bar.style.width=visualP+'%'; num.textContent=Math.round(visualP); }
+    (function tick(){ if(hidden) return; visualP += (95-visualP)*0.06; setProgress(visualP); requestAnimationFrame(tick); })();
+    function updateByAssets(){ const total=Math.max(preloadables.length,1); const base=Math.round((loaded/total)*80); setProgress(base); }
+    preloadables.forEach(img=>{ if(img.complete){ loaded++; updateByAssets(); } else { img.addEventListener('load', ()=>{ loaded++; updateByAssets(); }); img.addEventListener('error', ()=>{ loaded++; updateByAssets(); }); }});
+    const withTimeout=(p,ms)=>new Promise(res=>{ let done=false; const t=setTimeout(()=>{ if(!done) res('timeout'); },ms); Promise.resolve(p).then(()=>{done=true;clearTimeout(t);res('ok')}).catch(()=>{done=true;clearTimeout(t);res('err')}); });
+    const fontsReady=(document.fonts?document.fonts.ready:Promise.resolve()); const windowLoaded=new Promise(r=>{ if(document.readyState==='complete') r(); else window.addEventListener('load', r, {once:true}); });
+    Promise.all([withTimeout(fontsReady,3500), withTimeout(windowLoaded,6000)]).then(()=>forceHide()).catch(()=>forceHide());
+    const killer=setTimeout(()=>forceHide(), 8000);
+    function forceHide(){ if(hidden) return; hidden=true; clearTimeout(killer); setProgress(100); pre.classList.add('hidden'); }
+    pre.addEventListener('transitionend', (e)=>{ if(e.propertyName==='opacity' && pre.classList.contains('hidden')){ pre.style.display='none'; pre.setAttribute('aria-hidden','true'); }});
+
+    // Reveal on scroll
+    const revObs=new IntersectionObserver((ents)=>{ ents.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('reveal-visible'); revObs.unobserve(ent.target);} }); }, {threshold:.18});
+    document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+    // Fill skill bars on view
+    const barObserver=new IntersectionObserver((ents)=>{ ents.forEach(ent=>{ if(ent.isIntersecting){ const i=ent.target; const w=i.dataset.w||0; requestAnimationFrame(()=> i.style.width=w+'%'); barObserver.unobserve(i);} }); }, {threshold:.35});
+    document.querySelectorAll('.bar i[data-w]').forEach(i=>barObserver.observe(i));
+
+    // Back to top
+    (function(){ const btn=el('scrollTopBtn'); const onScroll=()=>{ const y=window.pageYOffset||document.documentElement.scrollTop; btn.classList.toggle('show', y>500); }; addEventListener('scroll', onScroll, {passive:true}); btn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'})); onScroll(); })();
+
+    // Parallax
+    const layers=document.querySelectorAll('.p-layer'); function parallax(){ const y=window.scrollY||0; layers.forEach((el,i)=>{ const depth=i===0?20:40; el.style.transform=`translate3d(0, ${y/depth}px, 0)`; }); } addEventListener('scroll', parallax, {passive:true}); parallax();
+
+    // CV viewer
+    const cvSection=document.getElementById('cv-viewer'); const closeCv=document.getElementById('closeCv');
+    document.querySelectorAll('a[href="#cv-viewer"]').forEach(a=> a.addEventListener('click',(ev)=>{ ev.preventDefault(); cvSection.hidden=false; cvSection.setAttribute('aria-hidden','false'); history.pushState({},'', '#cv-viewer'); }));
+    closeCv.addEventListener('click', ()=>{ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); if(location.hash==='#cv-viewer'){ history.back(); } });
+    window.addEventListener('popstate', ()=>{ if(location.hash !== '#cv-viewer'){ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); } });
+
+    // SMART PORTRAIT LOADER — варианты пути/регистра/кодировки
+    (function(){
+      const img=el('portrait'); if(!img) return; const base='assets/img/'; const rawName='саня властелин колец.png';
+      const variants=[ base+rawName, base+encodeURIComponent(rawName), base+rawName.replace(/ /g,'%20'), base+rawName.replace('.png','.PNG'), base+rawName.replace('.png','.jpg'), base+rawName.replace('.png','.jpeg'), base+'Саня властелин колец.png' ];
+      function tryNext(i=0){ if(i>=variants.length){ console.warn('Portrait not found, using fallback'); return; } const test=new Image(); test.onload=()=>{ img.src=variants[i]; }; test.onerror=()=>tryNext(i+1); test.src=variants[i]; }
+      tryNext();
+    })();
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click', (e)=>{ const id=a.getAttribute('href').slice(1); if(!id) return; const target=document.getElementById(id); if(!target) return; e.preventDefault(); const y=target.getBoundingClientRect().top + window.pageYOffset - (document.querySelector('.nav')?.offsetHeight||84); window.scrollTo({ top:y, behavior:'smooth' }); closeMenu(); }); });
+
+    // Year
+    el('year').textContent=new Date().getFullYear();
+
+    // === MUSIC CONTROL (как на референсе) ===
+    (function(){
+      const music = el('bgAudio');
+      const btn = el('musicControl');
+      let started = false; // запустим при первом взаимодействии
+
+      function setMutedUI(){ btn.classList.toggle('muted', music.paused); }
+
+      function startMusic(){ if(started) return; started = true; music.volume = 0.35; music.play().then(()=>{ setMutedUI(); }).catch(()=>{ setMutedUI(); /* останемся в muted, пока юзер не нажмёт */ }); }
+
+      // Первый клик в любом месте — стартует музыку
+      window.addEventListener('pointerdown', function once(){ startMusic(); window.removeEventListener('pointerdown', once, true); }, true);
+
+      // Кнопка: play/pause
+      btn.addEventListener('click', ()=>{ if(music.paused){ music.play().then(setMutedUI); } else { music.pause(); setMutedUI(); } });
+
+      // Пауза при скрытии вкладки
+      document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ if(!music.paused) music.pause(); } else { if(started && btn && !btn.classList.contains('muted')){ music.play().catch(()=>{}); } } setMutedUI(); });
+
+      setMutedUI();
+    })();
+  </script>
+</body>
+</html>
