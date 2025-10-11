@@ -81,9 +81,16 @@
     .cta span{font-weight:900; letter-spacing:.2px; color:var(--ink); text-shadow:0 1px 0 rgba(0,0,0,.6)}
     .cta::after{content:""; position:absolute; inset:0; background:radial-gradient(600px 160px at var(--mx,50%) -20%, rgba(209,169,84,.35), transparent 60%); transition:220ms ease; pointer-events:none}
     .ghost{padding:10px 14px; border-radius:14px; border:1px dashed var(--line); color:var(--ink); text-shadow:0 1px 0 rgba(0,0,0,.5)}
-    @media (max-width:960px){ .menu{display:none; position:fixed; left:max(4vw,12px); right:max(4vw,12px); top:calc(var(--nav-h) - 8px);
-      padding:14px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.2)); box-shadow:var(--shadow); gap:10px; flex-direction:column; z-index:41}
-      .menu-toggle{display:inline-flex} body.menu-open{overflow:hidden}}
+    @media (max-width:960px){ 
+      .menu{display:none; position:fixed; left:max(4vw,12px); right:max(4vw,12px); top:calc(var(--nav-h) + 12px);
+        padding:14px; border:1px solid var(--line); border-radius:16px; 
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                    url('assets/img/vintaznyi-granz.jpg') center/cover no-repeat;
+        box-shadow:var(--shadow); gap:10px; flex-direction:column; z-index:41}
+      .menu.open{display:flex}
+      .menu-toggle{display:inline-flex} 
+      body.menu-open{overflow:hidden}
+    }
 
     /* Hero */
     .hero{position:relative; padding:96px 0 40px; border-bottom:1px solid var(--line);
@@ -118,6 +125,9 @@
     /* Runes band */
     .runes{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15)); padding:18px 0; text-align:center}
     .runes .inner{font-family:ElvishRingNFI, Cinzel, serif; letter-spacing:.08em; color:var(--accent); text-shadow:0 0 16px rgba(209,169,84,.35); font-size:clamp(18px,2.6vw,28px)}
+    @media (max-width:860px){
+      .runes .inner{max-width:90%; margin:0 auto}
+    }
 
     /* Timeline */
     .timeline{position:relative; padding-left:26px}
@@ -137,18 +147,18 @@
     .p-layer.leaves{right:-6vw; top:-4vh; width:42vw; opacity:.5}
     .p-layer.map{left:-8vw; bottom:-6vh; width:52vw; opacity:.38}
 
-    /* Preloader with scroll texture */
+    /* Preloader with scroll texture - UPDATED */
     .preloader{position:fixed; inset:0; z-index:60; display:grid; place-items:center; background:radial-gradient(1200px 700px at 50% -10%, rgba(209,169,84,.1), transparent 70%), #0b0a07; transition:opacity .7s var(--soft), visibility .7s var(--soft)}
     .preloader.hidden{opacity:0; visibility:hidden; pointer-events:none}
     .scroll-skin{position:absolute; width:min(90vw, 880px); aspect-ratio:3/2; background:var(--pre-scroll) center/cover no-repeat; border:1px solid var(--line); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.5); filter:sepia(.3) contrast(1.05) saturate(1.1)}
     .scroll-img{position:absolute; width:min(94vw, 920px); height:auto; opacity:.95; filter:drop-shadow(0 10px 40px rgba(0,0,0,.5))}
     .ring-wrap{position:relative; width:min(46vh,480px); aspect-ratio:1/1; filter:drop-shadow(0 20px 40px rgba(209,169,84,.25))}
     .ring{width:100%; height:100%}
-    .ring .gold{stroke:url(#gold); stroke-width:18; fill:none}
-    .ring .text{font-family:ElvishRingNFI, Cinzel, serif; fill:var(--ring); font-size:22px; letter-spacing:.06em}
+    .ring .gold{stroke:url(#gold); stroke-width:22; fill:none; filter:drop-shadow(0 0 12px rgba(209,169,84,.4))}
+    .ring .text{font-family:SauronKing, ElvishRingNFI, Cinzel, serif; fill:var(--ring); font-size:24px; letter-spacing:.06em; font-weight:bold; text-shadow:0 0 8px rgba(209,169,84,.6)}
     .ring-rot{animation:spin 9s linear infinite; transform-origin:50% 50%}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .progress{position:absolute; inset:auto 0 5%; display:grid; place-items:center; text-align:center}
+    .progress{position:absolute; inset:auto 0 10%; display:grid; place-items:center; text-align:center}
     .progress .bar{width:260px; height:7px; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin:12px auto 8px; background:rgba(255,255,255,.08)}
     .progress .bar>i{display:block; height:100%; width:0%; background:linear-gradient(90deg, rgba(209,169,84,.15), rgba(209,169,84,.6)); box-shadow:0 0 16px rgba(209,169,84,.45) inset; transition:width .3s var(--soft)}
     .progress .label{color:var(--ink); font:800 14px/1 FlareSerif821, Inter, serif; text-shadow:0 1px 0 rgba(0,0,0,.6)}
@@ -160,8 +170,8 @@
     /* Footer */
     footer{padding:50px 0}
 
-    /* Back to top */
-    .scroll-top{ position:fixed; right:16px; bottom:16px; border:none; border-radius:12px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3)); border:1px solid var(--line); color:var(--ink); box-shadow: var(--shadow); cursor:pointer; opacity:0; visibility:hidden; transform:translateY(8px); transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index:65; }
+    /* Back to top - UPDATED */
+    .scroll-top{ position:fixed; right:16px; bottom:16px; border:none; border-radius:16px; padding:20px; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3)); border:1px solid var(--line); color:var(--ink); box-shadow: var(--shadow); cursor:pointer; opacity:0; visibility:hidden; transform:translateY(8px); transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index:65; font-size:24px; width:60px; height:60px; display:grid; place-items:center; }
     .scroll-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
 
     /* Music control (как на референсе) */
@@ -209,7 +219,12 @@
     <div class="container nav-inner">
       <a href="#top" class="logo" aria-label="На главную">
         <span class="mark" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8" stroke-width="1.5"/><path d="M12 4a8 8 0 0 1 0 16" stroke-width="1.5"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <path d="M12 3v18" stroke-linecap="round"/>
+            <path d="M3 12h18" stroke-linecap="round"/>
+          </svg>
         </span>
         <strong class="brand">A. Elfimov</strong>
       </a>
@@ -222,7 +237,6 @@
         <a href="#education" onclick="closeMenu()">Обучение</a>
         <a href="#contacts" onclick="closeMenu()">Контакты</a>
         <button class="cta" id="themeToggle" type="button" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Тема: Shire</span></button>
-        <!-- удалили кнопку звука из меню -->
       </div>
     </div>
   </nav>
@@ -400,7 +414,7 @@
         <div class="card reveal">
           <div class="p" style="font-weight:800">Резюме (PDF)</div>
           <p class="p">Скачать полную версию резюме.</p>
-          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" download onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
+          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
           <div style="margin-top:10px"><a class="ghost" href="#cv-viewer">Открыть в окне</a></div>
         </div>
       </div>
@@ -456,9 +470,20 @@
     function btnLeave(e){ e.currentTarget.style.removeProperty('--mx'); }
     function el(id){ return document.getElementById(id) }
 
-    // Mobile menu
-    function toggleMenu(btn){ const m=el('menu'); const open=m.classList.toggle('open'); document.body.classList.toggle('menu-open', open); btn.setAttribute('aria-expanded', open); setNavHeightVar(); }
-    function closeMenu(){ const m=el('menu'); m.classList.remove('open'); document.body.classList.remove('menu-open'); setNavHeightVar(); }
+    // Mobile menu - FIXED
+    function toggleMenu(btn){ 
+      const m=el('menu'); 
+      const open=m.classList.toggle('open'); 
+      document.body.classList.toggle('menu-open', open); 
+      btn.setAttribute('aria-expanded', open); 
+      setNavHeightVar(); 
+    }
+    function closeMenu(){ 
+      const m=el('menu'); 
+      m.classList.remove('open'); 
+      document.body.classList.remove('menu-open'); 
+      setNavHeightVar(); 
+    }
 
     // Reserve nav height
     function setNavHeightVar(){ const nav=document.querySelector('.nav'); if(!nav) return; document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px'); }
@@ -470,20 +495,82 @@
     applyTheme(localStorage.getItem('lotr:theme')||'shire');
     themeToggle.addEventListener('click', ()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='mordor'?'shire':'mordor'); });
 
-    // Robust PRELOADER (anti-freeze)
+    // Robust PRELOADER (anti-freeze) - UPDATED: минимальное время 2 секунды и правильный прогресс
     const pre = el('preloader'); const bar = el('progressBar'); const num = el('progressNum');
     const preloadables = Array.from(document.querySelectorAll('[data-preload]'));
     let loaded=0, visualP=0, hidden=false;
-    function setProgress(p){ visualP=Math.max(visualP,p); bar.style.width=visualP+'%'; num.textContent=Math.round(visualP); }
-    (function tick(){ if(hidden) return; visualP += (95-visualP)*0.06; setProgress(visualP); requestAnimationFrame(tick); })();
-    function updateByAssets(){ const total=Math.max(preloadables.length,1); const base=Math.round((loaded/total)*80); setProgress(base); }
-    preloadables.forEach(img=>{ if(img.complete){ loaded++; updateByAssets(); } else { img.addEventListener('load', ()=>{ loaded++; updateByAssets(); }); img.addEventListener('error', ()=>{ loaded++; updateByAssets(); }); }});
+    
+    // Функция установки прогресса - начинаем с 0%
+    function setProgress(p){ 
+      visualP=Math.max(visualP,p); 
+      bar.style.width=visualP+'%'; 
+      num.textContent=Math.round(visualP); 
+    }
+    
+    // Анимация прогресса - начинаем с 0%
+    (function tick(){ 
+      if(hidden) return; 
+      // Плавно увеличиваем до 95%, но не более текущего реального прогресса загрузки
+      const target = Math.min(95, Math.max(visualP, (loaded/preloadables.length)*100));
+      visualP += (target - visualP)*0.06; 
+      setProgress(visualP); 
+      requestAnimationFrame(tick); 
+    })();
+    
+    function updateByAssets(){ 
+      loaded++; 
+      // Реальный прогресс загрузки (0-100%)
+      const realProgress = (loaded/preloadables.length)*100;
+      // Устанавливаем визуальный прогресс как максимум между текущим и реальным
+      if (realProgress > visualP) {
+        visualP = realProgress;
+        setProgress(visualP);
+      }
+    }
+    
+    preloadables.forEach(img=>{ 
+      if(img.complete){ 
+        loaded++; 
+        updateByAssets(); 
+      } else { 
+        img.addEventListener('load', ()=>{ updateByAssets(); }); 
+        img.addEventListener('error', ()=>{ updateByAssets(); }); 
+      }
+    });
+    
+    // Минимальное время показа прелоадера - 2 секунды
+    const minDisplayTime = 2000;
+    const startTime = Date.now();
+    
     const withTimeout=(p,ms)=>new Promise(res=>{ let done=false; const t=setTimeout(()=>{ if(!done) res('timeout'); },ms); Promise.resolve(p).then(()=>{done=true;clearTimeout(t);res('ok')}).catch(()=>{done=true;clearTimeout(t);res('err')}); });
-    const fontsReady=(document.fonts?document.fonts.ready:Promise.resolve()); const windowLoaded=new Promise(r=>{ if(document.readyState==='complete') r(); else window.addEventListener('load', r, {once:true}); });
-    Promise.all([withTimeout(fontsReady,3500), withTimeout(windowLoaded,6000)]).then(()=>forceHide()).catch(()=>forceHide());
+    const fontsReady=(document.fonts?document.fonts.ready:Promise.resolve()); 
+    const windowLoaded=new Promise(r=>{ if(document.readyState==='complete') r(); else window.addEventListener('load', r, {once:true}); });
+    
+    Promise.all([withTimeout(fontsReady,3500), withTimeout(windowLoaded,6000)]).then(()=>{
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, minDisplayTime - elapsed);
+      setTimeout(forceHide, remaining);
+    }).catch(()=>{
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, minDisplayTime - elapsed);
+      setTimeout(forceHide, remaining);
+    });
+    
     const killer=setTimeout(()=>forceHide(), 8000);
-    function forceHide(){ if(hidden) return; hidden=true; clearTimeout(killer); setProgress(100); pre.classList.add('hidden'); }
-    pre.addEventListener('transitionend', (e)=>{ if(e.propertyName==='opacity' && pre.classList.contains('hidden')){ pre.style.display='none'; pre.setAttribute('aria-hidden','true'); }});
+    function forceHide(){ 
+      if(hidden) return; 
+      hidden=true; 
+      clearTimeout(killer); 
+      setProgress(100); 
+      setTimeout(() => pre.classList.add('hidden'), 300);
+    }
+    
+    pre.addEventListener('transitionend', (e)=>{ 
+      if(e.propertyName==='opacity' && pre.classList.contains('hidden')){ 
+        pre.style.display='none'; 
+        pre.setAttribute('aria-hidden','true'); 
+      }
+    });
 
     // Reveal on scroll
     const revObs=new IntersectionObserver((ents)=>{ ents.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('reveal-visible'); revObs.unobserve(ent.target);} }); }, {threshold:.18});
@@ -499,7 +586,7 @@
     // Parallax
     const layers=document.querySelectorAll('.p-layer'); function parallax(){ const y=window.scrollY||0; layers.forEach((el,i)=>{ const depth=i===0?20:40; el.style.transform=`translate3d(0, ${y/depth}px, 0)`; }); } addEventListener('scroll', parallax, {passive:true}); parallax();
 
-    // CV viewer
+    // CV viewer - REMOVED AUTO-DOWNLOAD ON MOBILE
     const cvSection=document.getElementById('cv-viewer'); const closeCv=document.getElementById('closeCv');
     document.querySelectorAll('a[href="#cv-viewer"]').forEach(a=> a.addEventListener('click',(ev)=>{ ev.preventDefault(); cvSection.hidden=false; cvSection.setAttribute('aria-hidden','false'); history.pushState({},'', '#cv-viewer'); }));
     closeCv.addEventListener('click', ()=>{ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); if(location.hash==='#cv-viewer'){ history.back(); } });
