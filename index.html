@@ -92,14 +92,14 @@
       body.menu-open{overflow:hidden}
     }
 
-    /* Hero */
-    .hero{position:relative; padding:96px 0 40px; border-bottom:1px solid var(--line);
+    /* Hero - UPDATED: уменьшены отступы и увеличены шрифты */
+    .hero{position:relative; padding:60px 0 40px; border-bottom:1px solid var(--line);
       background:radial-gradient(1200px 600px at 50% 0%, rgba(209,169,84,.12), transparent 70%)}
     .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
-    .lead{display:inline-block; color:var(--ink); font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.5)}
-    .title{font:800 clamp(28px,6vw,56px)/1.1 Ringbearer, Cinzel, serif; letter-spacing:.02em; margin:.25em 0 .35em}
-    .subtitle{font:700 clamp(15px,2.1vw,19px)/1.5 FlareSerif821, Inter, serif; color:var(--ink); opacity:.9; text-shadow:0 1px 0 rgba(0,0,0,.5)}
-    .motto{margin:8px 0 0; font-family:ElvishRingNFI, Cinzel, serif; letter-spacing:.08em; color:var(--accent); opacity:.95; text-shadow:0 0 18px rgba(209,169,84,.35)}
+    .lead{display:inline-block; color:var(--ink); font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.5); font-size:clamp(14px, 1.8vw, 18px); margin-bottom:8px}
+    .title{font:800 clamp(32px,7vw,64px)/1.1 Ringbearer, Cinzel, serif; letter-spacing:.02em; margin:.1em 0 .3em}
+    .subtitle{font:700 clamp(16px,2.3vw,22px)/1.5 FlareSerif821, Inter, serif; color:var(--ink); opacity:.9; text-shadow:0 1px 0 rgba(0,0,0,.5); margin-bottom:12px}
+    .motto{margin:12px 0 0; font-family:ElvishRingNFI, Cinzel, serif; letter-spacing:.08em; color:var(--accent); opacity:.95; text-shadow:0 0 18px rgba(209,169,84,.35); font-size:clamp(16px,2.2vw,20px)}
     .hero-cta{display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 0}
 
     /* Portrait — без наложений */
@@ -197,9 +197,17 @@
     .music-control.muted{ opacity:.75 }
     .music-control .music-icon{ opacity:.9 }
 
-    @media (max-width:860px){ 
+    /* Мобильная адаптация для еще большего размера текста в хедере */
+    @media (max-width:860px) { 
       .hero-grid{grid-template-columns:1fr} 
       .portrait-card{max-width:420px; margin:0 auto} 
+      
+      /* Увеличиваем текст на мобилке */
+      .hero{padding:50px 0 30px}
+      .title{font-size:clamp(36px,8vw,68px); margin:.05em 0 .25em}
+      .subtitle{font-size:clamp(18px,2.8vw,24px)}
+      .motto{font-size:clamp(18px,2.8vw,24px)}
+      .lead{font-size:clamp(16px,2.2vw,20px)}
     }
   </style>
 </head>
