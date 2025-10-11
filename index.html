@@ -147,7 +147,7 @@
     .p-layer.leaves{right:-6vw; top:-4vh; width:42vw; opacity:.5}
     .p-layer.map{left:-8vw; bottom:-6vh; width:52vw; opacity:.38}
 
-    /* Preloader with scroll texture - UPDATED */
+    /* Preloader with scroll texture - UPDATED FOR MOBILE */
     .preloader{position:fixed; inset:0; z-index:60; display:grid; place-items:center; background:radial-gradient(1200px 700px at 50% -10%, rgba(209,169,84,.1), transparent 70%), #0b0a07; transition:opacity .7s var(--soft), visibility .7s var(--soft)}
     .preloader.hidden{opacity:0; visibility:hidden; pointer-events:none}
     .scroll-skin{position:absolute; width:min(90vw, 880px); aspect-ratio:3/2; background:var(--pre-scroll) center/cover no-repeat; border:1px solid var(--line); border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.5); filter:sepia(.3) contrast(1.05) saturate(1.1)}
@@ -162,6 +162,24 @@
     .progress .bar{width:260px; height:7px; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin:12px auto 8px; background:rgba(255,255,255,.08)}
     .progress .bar>i{display:block; height:100%; width:0%; background:linear-gradient(90deg, rgba(209,169,84,.15), rgba(209,169,84,.6)); box-shadow:0 0 16px rgba(209,169,84,.45) inset; transition:width .3s var(--soft)}
     .progress .label{color:var(--ink); font:800 14px/1 FlareSerif821, Inter, serif; text-shadow:0 1px 0 rgba(0,0,0,.6)}
+
+    /* Mobile adaptations for preloader */
+    @media (max-width: 768px) {
+      .ring-wrap{width:min(70vw, 320px);}
+      .progress .bar{width:200px;}
+      .progress .label{font-size:12px;}
+      .ring .text{font-size:18px;}
+      .ring .gold{stroke-width:18;}
+      .progress{inset:auto 0 8%;}
+    }
+
+    @media (max-width: 480px) {
+      .ring-wrap{width:min(80vw, 280px);}
+      .progress .bar{width:180px;}
+      .ring .text{font-size:16px;}
+      .ring .gold{stroke-width:16;}
+      .progress{inset:auto 0 6%;}
+    }
 
     /* Reveal */
     .reveal{opacity:0; transform:translateY(12px); transition:opacity .6s var(--soft), transform .6s var(--soft)}
@@ -179,7 +197,10 @@
     .music-control.muted{ opacity:.75 }
     .music-control .music-icon{ opacity:.9 }
 
-    @media (max-width:860px){ .hero-grid{grid-template-columns:1fr} .portrait-card{max-width:420px; margin:0 auto} }
+    @media (max-width:860px){ 
+      .hero-grid{grid-template-columns:1fr} 
+      .portrait-card{max-width:420px; margin:0 auto} 
+    }
   </style>
 </head>
 <body>
@@ -414,7 +435,7 @@
         <div class="card reveal">
           <div class="p" style="font-weight:800">Резюме (PDF)</div>
           <p class="p">Скачать полную версию резюме.</p>
-          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
+          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" download onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
           <div style="margin-top:10px"><a class="ghost" href="#cv-viewer">Открыть в окне</a></div>
         </div>
       </div>
@@ -586,7 +607,7 @@
     // Parallax
     const layers=document.querySelectorAll('.p-layer'); function parallax(){ const y=window.scrollY||0; layers.forEach((el,i)=>{ const depth=i===0?20:40; el.style.transform=`translate3d(0, ${y/depth}px, 0)`; }); } addEventListener('scroll', parallax, {passive:true}); parallax();
 
-    // CV viewer - REMOVED AUTO-DOWNLOAD ON MOBILE
+    // CV viewer - PREVENT AUTO-DOWNLOAD ON MOBILE
     const cvSection=document.getElementById('cv-viewer'); const closeCv=document.getElementById('closeCv');
     document.querySelectorAll('a[href="#cv-viewer"]').forEach(a=> a.addEventListener('click',(ev)=>{ ev.preventDefault(); cvSection.hidden=false; cvSection.setAttribute('aria-hidden','false'); history.pushState({},'', '#cv-viewer'); }));
     closeCv.addEventListener('click', ()=>{ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); if(location.hash==='#cv-viewer'){ history.back(); } });
@@ -627,6 +648,30 @@
 
       setMutedUI();
     })();
+
+    // === MOBILE CV DOWNLOAD FIX ===
+    // На мобильных устройствах отключаем автоскачивание
+    function preventMobileDownload() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+      
+      if (isMobile) {
+        const resumeLink = document.getElementById('resumeLink');
+        if (resumeLink) {
+          resumeLink.removeAttribute('download');
+          resumeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const cvSection = document.getElementById('cv-viewer');
+            cvSection.hidden = false;
+            cvSection.setAttribute('aria-hidden','false');
+            history.pushState({}, '', '#cv-viewer');
+          });
+        }
+      }
+    }
+
+    // Запускаем при загрузке
+    document.addEventListener('DOMContentLoaded', preventMobileDownload);
+    window.addEventListener('resize', preventMobileDownload);
   </script>
 </body>
 </html>
