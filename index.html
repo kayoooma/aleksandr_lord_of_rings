@@ -24,9 +24,14 @@
   <link rel="preload" as="font" href="fonts/SauronKing.woff2" type="font/woff2" crossorigin>
   <link rel="preload" as="font" href="fonts/ElvishRingNFI.woff2" type="font/woff2" crossorigin>
   <link rel="preload" as="font" href="fonts/FlareSerif821.woff2" type="font/woff2" crossorigin>
-  <!-- Аватар (preload) -->
+  
+  <!-- КРИТИЧЕСКИЕ РЕСУРСЫ - предзагрузка ВСЕХ изображений -->
   <link rel="preload" as="image" href="assets/img/%D1%81%D0%B0%D0%BD%D1%8F%20%D0%B2%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D0%BB%D0%B8%D0%BD%20%D0%BA%D0%BE%D0%BB%D0%B5%D1%86.png">
   <link rel="preload" as="image" href="assets/img/саня%20властелин%20колец.png">
+  <link rel="preload" as="image" href="assets/img/vintaznyi-granz.jpg">
+  <link rel="preload" as="image" href="assets/img/pergament-scroll.png">
+  <link rel="preload" as="image" href="assets/stencils/leaves.svg">
+  <link rel="preload" as="image" href="assets/stencils/map.svg">
 
   <style>
     :root{
@@ -212,6 +217,14 @@
   </style>
 </head>
 <body>
+  <!-- Скрытые элементы для принудительной предзагрузки всех критических ресурсов -->
+  <div style="display: none;">
+    <img src="assets/img/vintaznyi-granz.jpg" alt="" onload="window.resourceLoaded('menu-texture')">
+    <img src="assets/img/pergament-scroll.png" alt="" onload="window.resourceLoaded('scroll-texture')">
+    <img src="assets/stencils/leaves.svg" alt="" onload="window.resourceLoaded('leaves-stencil')">
+    <img src="assets/stencils/map.svg" alt="" onload="window.resourceLoaded('map-stencil')">
+  </div>
+
   <!-- Parallax stencils (LotR aesthetic) -->
   <div class="parallax" aria-hidden="true">
     <img class="p-layer leaves" src="assets/stencils/leaves.svg" alt="" />
@@ -296,7 +309,7 @@
       </div>
       <aside class="portrait-card reveal" aria-label="Портрет">
         <div class="portrait-wrap">
-          <img class="portrait" id="portrait" alt="Портрет без эффектов" src="assets/img/portrait-fallback.jpg" data-preload>
+          <img class="portrait" id="portrait" alt="Портрет без эффектов" src="assets/img/portrait-fallback.jpg" data-preload onload="window.resourceLoaded('portrait')">
         </div>
       </aside>
     </div>
@@ -443,7 +456,7 @@
         <div class="card reveal">
           <div class="p" style="font-weight:800">Резюме (PDF)</div>
           <p class="p">Скачать полную версию резюме.</p>
-          <a class="cta" id="resumeLink" href="assets/cv.pdf" type="application/pdf" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
+          <a class="cta" id="resumeLink" type="application/pdf" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Скачать PDF</span></a>
           <div style="margin-top:10px"><a class="ghost" href="#cv-viewer">Открыть в окне</a></div>
         </div>
       </div>
@@ -456,7 +469,7 @@
       <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
         <div class="h2">Резюме (PDF)</div>
         <div style="display:flex;gap:8px">
-          <a class="cta" href="assets/cv.pdf" download><span>Скачать</span></a>
+          <button class="cta" id="downloadCv"><span>Скачать</span></button>
           <button class="cta" id="closeCv"><span>Закрыть</span></button>
         </div>
       </div>
@@ -494,6 +507,21 @@
   <div class="noise" aria-hidden="true"></div>
 
   <script>
+    // Глобальная система отслеживания загрузки ресурсов
+    window.resourceTracker = {
+      loaded: 0,
+      total: 6, // menu-texture, scroll-texture, leaves-stencil, map-stencil, portrait, fonts
+      resources: {}
+    };
+
+    window.resourceLoaded = function(resourceName) {
+      if (!window.resourceTracker.resources[resourceName]) {
+        window.resourceTracker.resources[resourceName] = true;
+        window.resourceTracker.loaded++;
+        updatePreloaderProgress();
+      }
+    };
+
     // Helpers
     function btnHover(e){ const r=e.currentTarget.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width*100).toFixed(2)+'%'; e.currentTarget.style.setProperty('--mx',x); }
     function btnLeave(e){ e.currentTarget.style.removeProperty('--mx'); }
@@ -524,192 +552,303 @@
     applyTheme(localStorage.getItem('lotr:theme')||'shire');
     themeToggle.addEventListener('click', ()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='mordor'?'shire':'mordor'); });
 
-    // Robust PRELOADER (anti-freeze) - UPDATED: минимальное время 2 секунды и правильный прогресс
-    const pre = el('preloader'); const bar = el('progressBar'); const num = el('progressNum');
-    const preloadables = Array.from(document.querySelectorAll('[data-preload]'));
-    let loaded=0, visualP=0, hidden=false;
+    // Улучшенная система предзагрузки с приоритетом текстур
+    function updatePreloaderProgress() {
+      const progress = Math.min(95, (window.resourceTracker.loaded / window.resourceTracker.total) * 100);
+      setProgress(progress);
+    }
+
+    // Robust PRELOADER (anti-freeze) - COMPLETELY REWORKED
+    const pre = el('preloader'); 
+    const bar = el('progressBar'); 
+    const num = el('progressNum');
     
-    // Функция установки прогресса - начинаем с 0%
+    let hidden = false;
+    let visualP = 0;
+    
     function setProgress(p){ 
-      visualP=Math.max(visualP,p); 
-      bar.style.width=visualP+'%'; 
-      num.textContent=Math.round(visualP); 
+      visualP = Math.max(visualP, p); 
+      bar.style.width = visualP + '%'; 
+      num.textContent = Math.round(visualP); 
     }
     
-    // Анимация прогресса - начинаем с 0%
+    // Анимация прогресса
     (function tick(){ 
       if(hidden) return; 
-      // Плавно увеличиваем до 95%, но не более текущего реального прогресса загрузки
-      const target = Math.min(95, Math.max(visualP, (loaded/preloadables.length)*100));
-      visualP += (target - visualP)*0.06; 
+      const target = Math.min(95, visualP + 0.8);
+      visualP += (target - visualP) * 0.05; 
       setProgress(visualP); 
       requestAnimationFrame(tick); 
     })();
     
-    function updateByAssets(){ 
-      loaded++; 
-      // Реальный прогресс загрузки (0-100%)
-      const realProgress = (loaded/preloadables.length)*100;
-      // Устанавливаем визуальный прогресс как максимум между текущим и реальным
-      if (realProgress > visualP) {
-        visualP = realProgress;
-        setProgress(visualP);
+    // Предзагрузка ВСЕХ критических ресурсов
+    function preloadCriticalResources() {
+      const resources = [
+        'assets/img/vintaznyi-granz.jpg',
+        'assets/img/pergament-scroll.png', 
+        'assets/stencils/leaves.svg',
+        'assets/stencils/map.svg'
+      ];
+      
+      resources.forEach(url => {
+        const img = new Image();
+        img.onload = function() {
+          const resourceName = url.split('/').pop().split('.')[0];
+          window.resourceLoaded(resourceName + '-texture');
+        };
+        img.src = url;
+      });
+    }
+    
+    // Загрузка шрифтов
+    function loadFonts() {
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          window.resourceLoaded('fonts');
+        });
+      } else {
+        setTimeout(() => window.resourceLoaded('fonts'), 1000);
       }
     }
     
-    preloadables.forEach(img=>{ 
-      if(img.complete){ 
-        loaded++; 
-        updateByAssets(); 
-      } else { 
-        img.addEventListener('load', ()=>{ updateByAssets(); }); 
-        img.addEventListener('error', ()=>{ updateByAssets(); }); 
+    // SMART PORTRAIT LOADER — гарантированная загрузка
+    (function(){
+      const img = el('portrait'); 
+      if(!img) return; 
+      
+      const base = 'assets/img/'; 
+      const rawName = 'саня властелин колец.png';
+      const variants = [ 
+        base + rawName, 
+        base + encodeURIComponent(rawName), 
+        base + rawName.replace(/ /g,'%20'), 
+        base + rawName.replace('.png','.PNG'), 
+        base + rawName.replace('.png','.jpg'), 
+        base + rawName.replace('.png','.jpeg'), 
+        base + 'Саня властелин колец.png' 
+      ];
+      
+      function tryNext(i = 0){ 
+        if(i >= variants.length){ 
+          console.warn('Portrait not found, using fallback'); 
+          window.resourceLoaded('portrait');
+          return; 
+        } 
+        
+        const test = new Image();
+        test.onload = function() {
+          img.src = variants[i];
+          window.resourceLoaded('portrait');
+        };
+        test.onerror = function() {
+          tryNext(i + 1);
+        };
+        test.src = variants[i];
       }
-    });
+      tryNext();
+    })();
+
+    // Запуск предзагрузки
+    preloadCriticalResources();
+    loadFonts();
     
-    // Минимальное время показа прелоадера - 2 секунды
-    const minDisplayTime = 2000;
+    // Минимальное время показа прелоадера - 2.5 секунды
+    const minDisplayTime = 2500;
     const startTime = Date.now();
     
-    const withTimeout=(p,ms)=>new Promise(res=>{ let done=false; const t=setTimeout(()=>{ if(!done) res('timeout'); },ms); Promise.resolve(p).then(()=>{done=true;clearTimeout(t);res('ok')}).catch(()=>{done=true;clearTimeout(t);res('err')}); });
-    const fontsReady=(document.fonts?document.fonts.ready:Promise.resolve()); 
-    const windowLoaded=new Promise(r=>{ if(document.readyState==='complete') r(); else window.addEventListener('load', r, {once:true}); });
+    const checkResources = setInterval(() => {
+      if (window.resourceTracker.loaded >= window.resourceTracker.total) {
+        clearInterval(checkResources);
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, minDisplayTime - elapsed);
+        setTimeout(forceHide, remaining);
+      }
+    }, 100);
     
-    Promise.all([withTimeout(fontsReady,3500), withTimeout(windowLoaded,6000)]).then(()=>{
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, minDisplayTime - elapsed);
-      setTimeout(forceHide, remaining);
-    }).catch(()=>{
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, minDisplayTime - elapsed);
-      setTimeout(forceHide, remaining);
-    });
+    const killer = setTimeout(() => forceHide(), 8000);
     
-    const killer=setTimeout(()=>forceHide(), 8000);
     function forceHide(){ 
       if(hidden) return; 
-      hidden=true; 
+      hidden = true; 
+      clearInterval(checkResources);
       clearTimeout(killer); 
       setProgress(100); 
       setTimeout(() => pre.classList.add('hidden'), 300);
     }
     
     pre.addEventListener('transitionend', (e)=>{ 
-      if(e.propertyName==='opacity' && pre.classList.contains('hidden')){ 
-        pre.style.display='none'; 
+      if(e.propertyName === 'opacity' && pre.classList.contains('hidden')){ 
+        pre.style.display = 'none'; 
         pre.setAttribute('aria-hidden','true'); 
       }
     });
 
     // Reveal on scroll
-    const revObs=new IntersectionObserver((ents)=>{ ents.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('reveal-visible'); revObs.unobserve(ent.target);} }); }, {threshold:.18});
-    document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+    const revObs = new IntersectionObserver((ents) => { 
+      ents.forEach(ent => { 
+        if(ent.isIntersecting){ 
+          ent.target.classList.add('reveal-visible'); 
+          revObs.unobserve(ent.target);
+        } 
+      }); 
+    }, { threshold: .18 });
+    
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
     // Fill skill bars on view
-    const barObserver=new IntersectionObserver((ents)=>{ ents.forEach(ent=>{ if(ent.isIntersecting){ const i=ent.target; const w=i.dataset.w||0; requestAnimationFrame(()=> i.style.width=w+'%'); barObserver.unobserve(i);} }); }, {threshold:.35});
-    document.querySelectorAll('.bar i[data-w]').forEach(i=>barObserver.observe(i));
+    const barObserver = new IntersectionObserver((ents) => { 
+      ents.forEach(ent => { 
+        if(ent.isIntersecting){ 
+          const i = ent.target; 
+          const w = i.dataset.w || 0; 
+          requestAnimationFrame(() => i.style.width = w + '%'); 
+          barObserver.unobserve(i);
+        } 
+      }); 
+    }, { threshold: .35 });
+    
+    document.querySelectorAll('.bar i[data-w]').forEach(i => barObserver.observe(i));
 
     // Back to top
-    (function(){ const btn=el('scrollTopBtn'); const onScroll=()=>{ const y=window.pageYOffset||document.documentElement.scrollTop; btn.classList.toggle('show', y>500); }; addEventListener('scroll', onScroll, {passive:true}); btn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'})); onScroll(); })();
-
-    // Parallax
-    const layers=document.querySelectorAll('.p-layer'); function parallax(){ const y=window.scrollY||0; layers.forEach((el,i)=>{ const depth=i===0?20:40; el.style.transform=`translate3d(0, ${y/depth}px, 0)`; }); } addEventListener('scroll', parallax, {passive:true}); parallax();
-
-    // CV viewer - PREVENT AUTO-DOWNLOAD ON MOBILE
-    const cvSection=document.getElementById('cv-viewer'); const closeCv=document.getElementById('closeCv');
-    document.querySelectorAll('a[href="#cv-viewer"]').forEach(a=> a.addEventListener('click',(ev)=>{ ev.preventDefault(); cvSection.hidden=false; cvSection.setAttribute('aria-hidden','false'); history.pushState({},'', '#cv-viewer'); }));
-    closeCv.addEventListener('click', ()=>{ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); if(location.hash==='#cv-viewer'){ history.back(); } });
-    window.addEventListener('popstate', ()=>{ if(location.hash !== '#cv-viewer'){ cvSection.hidden=true; cvSection.setAttribute('aria-hidden','true'); } });
-
-    // SMART PORTRAIT LOADER — варианты пути/регистра/кодировки
-    (function(){
-      const img=el('portrait'); if(!img) return; const base='assets/img/'; const rawName='саня властелин колец.png';
-      const variants=[ base+rawName, base+encodeURIComponent(rawName), base+rawName.replace(/ /g,'%20'), base+rawName.replace('.png','.PNG'), base+rawName.replace('.png','.jpg'), base+rawName.replace('.png','.jpeg'), base+'Саня властелин колец.png' ];
-      function tryNext(i=0){ if(i>=variants.length){ console.warn('Portrait not found, using fallback'); return; } const test=new Image(); test.onload=()=>{ img.src=variants[i]; }; test.onerror=()=>tryNext(i+1); test.src=variants[i]; }
-      tryNext();
+    (function(){ 
+      const btn = el('scrollTopBtn'); 
+      const onScroll = () => { 
+        const y = window.pageYOffset || document.documentElement.scrollTop; 
+        btn.classList.toggle('show', y > 500); 
+      }; 
+      addEventListener('scroll', onScroll, {passive:true}); 
+      btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'})); 
+      onScroll(); 
     })();
 
+    // Parallax
+    const layers = document.querySelectorAll('.p-layer'); 
+    function parallax(){ 
+      const y = window.scrollY || 0; 
+      layers.forEach((el, i) => { 
+        const depth = i === 0 ? 20 : 40; 
+        el.style.transform = `translate3d(0, ${y/depth}px, 0)`; 
+      }); 
+    } 
+    addEventListener('scroll', parallax, {passive:true}); 
+    parallax();
+
+    // CV viewer - COMPLETELY PREVENT AUTO-DOWNLOAD
+    const cvSection = document.getElementById('cv-viewer'); 
+    const closeCv = document.getElementById('closeCv');
+    const downloadCv = document.getElementById('downloadCv');
+    
+    // Настройка ссылок на PDF - ПОЛНОСТЬЮ УБИРАЕМ АВТОЗАГРУЗКУ
+    document.querySelectorAll('a[href="#cv-viewer"]').forEach(a => {
+      a.addEventListener('click', (ev) => { 
+        ev.preventDefault(); 
+        cvSection.hidden = false; 
+        cvSection.setAttribute('aria-hidden','false'); 
+        history.pushState({}, '', '#cv-viewer'); 
+      });
+    });
+    
+    // Кнопка скачивания в просмотрщике
+    downloadCv.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = 'assets/cv.pdf';
+      link.download = 'Александр_Елфимов_резюме.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+    
+    // Основная ссылка скачивания
+    const resumeLink = el('resumeLink');
+    resumeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+      
+      if (isMobile) {
+        // На мобильных открываем просмотрщик
+        cvSection.hidden = false;
+        cvSection.setAttribute('aria-hidden','false');
+        history.pushState({}, '', '#cv-viewer');
+      } else {
+        // На десктопе скачиваем
+        const link = document.createElement('a');
+        link.href = 'assets/cv.pdf';
+        link.download = 'Александр_Елфимов_резюме.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+    
+    closeCv.addEventListener('click', () => { 
+      cvSection.hidden = true; 
+      cvSection.setAttribute('aria-hidden','true'); 
+      if(location.hash === '#cv-viewer'){ 
+        history.back(); 
+      } 
+    });
+    
+    window.addEventListener('popstate', () => { 
+      if(location.hash !== '#cv-viewer'){ 
+        cvSection.hidden = true; 
+        cvSection.setAttribute('aria-hidden','true'); 
+      } 
+    });
+
     // Smooth anchor scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click', (e)=>{ const id=a.getAttribute('href').slice(1); if(!id) return; const target=document.getElementById(id); if(!target) return; e.preventDefault(); const y=target.getBoundingClientRect().top + window.pageYOffset - (document.querySelector('.nav')?.offsetHeight||84); window.scrollTo({ top:y, behavior:'smooth' }); closeMenu(); }); });
+    document.querySelectorAll('a[href^="#"]').forEach(a => { 
+      a.addEventListener('click', (e) => { 
+        const id = a.getAttribute('href').slice(1); 
+        if(!id) return; 
+        const target = document.getElementById(id); 
+        if(!target) return; 
+        e.preventDefault(); 
+        const y = target.getBoundingClientRect().top + window.pageYOffset - (document.querySelector('.nav')?.offsetHeight || 84); 
+        window.scrollTo({ top: y, behavior: 'smooth' }); 
+        closeMenu(); 
+      }); 
+    });
 
     // Year
-    el('year').textContent=new Date().getFullYear();
+    el('year').textContent = new Date().getFullYear();
 
     // === MUSIC CONTROL (как на референсе) ===
     (function(){
       const music = el('bgAudio');
       const btn = el('musicControl');
-      let started = false; // запустим при первом взаимодействии
+      let started = false;
 
       function setMutedUI(){ btn.classList.toggle('muted', music.paused); }
 
-      function startMusic(){ if(started) return; started = true; music.volume = 0.35; music.play().then(()=>{ setMutedUI(); }).catch(()=>{ setMutedUI(); /* останемся в muted, пока юзер не нажмёт */ }); }
+      function startMusic(){ if(started) return; started = true; music.volume = 0.35; music.play().then(() => { setMutedUI(); }).catch(() => { setMutedUI(); }); }
 
       // Первый клик в любом месте — стартует музыку
       window.addEventListener('pointerdown', function once(){ startMusic(); window.removeEventListener('pointerdown', once, true); }, true);
 
       // Кнопка: play/pause
-      btn.addEventListener('click', ()=>{ if(music.paused){ music.play().then(setMutedUI); } else { music.pause(); setMutedUI(); } });
+      btn.addEventListener('click', () => { 
+        if(music.paused){ 
+          music.play().then(setMutedUI); 
+        } else { 
+          music.pause(); 
+          setMutedUI(); 
+        } 
+      });
 
       // Пауза при скрытии вкладки
-      document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ if(!music.paused) music.pause(); } else { if(started && btn && !btn.classList.contains('muted')){ music.play().catch(()=>{}); } } setMutedUI(); });
+      document.addEventListener('visibilitychange', () => { 
+        if(document.hidden){ 
+          if(!music.paused) music.pause(); 
+        } else { 
+          if(started && btn && !btn.classList.contains('muted')){ 
+            music.play().catch(() => {}); 
+          } 
+        } 
+        setMutedUI(); 
+      });
 
       setMutedUI();
     })();
-
-    // === MOBILE CV DOWNLOAD FIX ===
-    // Полностью предотвращаем автоскачивание на мобильных
-    function handleMobileCV() {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-      
-      if (isMobile) {
-        // Убираем download атрибут у всех ссылок на PDF
-        const resumeLinks = document.querySelectorAll('a[href*=".pdf"], a[download]');
-        resumeLinks.forEach(link => {
-          link.removeAttribute('download');
-          
-          // Заменяем поведение на открытие в просмотрщике
-          if (link.href.includes('cv.pdf') || link.getAttribute('href') === '#cv-viewer') {
-            link.addEventListener('click', function(e) {
-              e.preventDefault();
-              const cvSection = document.getElementById('cv-viewer');
-              if (cvSection) {
-                cvSection.hidden = false;
-                cvSection.setAttribute('aria-hidden','false');
-                history.pushState({}, '', '#cv-viewer');
-              }
-            });
-          }
-        });
-        
-        // Также предотвращаем автоматическое открытие PDF
-        const pdfIframe = document.querySelector('iframe[src*=".pdf"]');
-        if (pdfIframe && !location.hash.includes('cv-viewer')) {
-          pdfIframe.style.display = 'none';
-        }
-      }
-    }
-
-    // Запускаем при загрузке и изменении размера
-    document.addEventListener('DOMContentLoaded', handleMobileCV);
-    window.addEventListener('resize', handleMobileCV);
-
-    // Дополнительная защита - предотвращаем переход по PDF ссылкам на мобильных
-    document.addEventListener('click', function(e) {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-      if (isMobile) {
-        const link = e.target.closest('a');
-        if (link && (link.href.includes('.pdf') || link.getAttribute('href') === '#cv-viewer')) {
-          e.preventDefault();
-          const cvSection = document.getElementById('cv-viewer');
-          if (cvSection) {
-            cvSection.hidden = false;
-            cvSection.setAttribute('aria-hidden','false');
-            history.pushState({}, '', '#cv-viewer');
-          }
-        }
-      }
-    });
   </script>
 </body>
 </html>
