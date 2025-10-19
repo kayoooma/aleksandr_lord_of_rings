@@ -473,7 +473,7 @@
           <button class="cta" id="closeCv"><span>Закрыть</span></button>
         </div>
       </div>
-      <iframe src="assets/cv.pdf" title="Резюме PDF" style="width:100%;height:100%;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+      <iframe id="cvIframe" title="Резюме PDF" style="width:100%;height:100%;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
     </div>
   </section>
 
@@ -733,15 +733,30 @@
     addEventListener('scroll', parallax, {passive:true}); 
     parallax();
 
-    // CV viewer - COMPLETELY PREVENT AUTO-DOWNLOAD
+    // === ПОЛНОСТЬЮ ПЕРЕРАБОТАННАЯ СИСТЕМА PDF ===
+    // Глобальные переменные для управления PDF
+    let pdfViewerInitialized = false;
+    
+    // CV viewer - ПОЛНОСТЬЮ ПРЕДОТВРАЩАЕМ АВТОЗАГРУЗКУ
     const cvSection = document.getElementById('cv-viewer'); 
     const closeCv = document.getElementById('closeCv');
     const downloadCv = document.getElementById('downloadCv');
+    const cvIframe = document.getElementById('cvIframe');
+    
+    // ИНИЦИАЛИЗАЦИЯ ПРОСМОТРЩИКА PDF (только при первом открытии)
+    function initializePdfViewer() {
+      if (pdfViewerInitialized) return;
+      
+      // Устанавливаем src только при первом открытии
+      cvIframe.src = 'assets/cv.pdf';
+      pdfViewerInitialized = true;
+    }
     
     // Настройка ссылок на PDF - ПОЛНОСТЬЮ УБИРАЕМ АВТОЗАГРУЗКУ
     document.querySelectorAll('a[href="#cv-viewer"]').forEach(a => {
       a.addEventListener('click', (ev) => { 
         ev.preventDefault(); 
+        initializePdfViewer();
         cvSection.hidden = false; 
         cvSection.setAttribute('aria-hidden','false'); 
         history.pushState({}, '', '#cv-viewer'); 
@@ -766,6 +781,7 @@
       
       if (isMobile) {
         // На мобильных открываем просмотрщик
+        initializePdfViewer();
         cvSection.hidden = false;
         cvSection.setAttribute('aria-hidden','false');
         history.pushState({}, '', '#cv-viewer');
