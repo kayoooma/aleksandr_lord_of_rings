@@ -374,7 +374,7 @@
         <div class="motto">‹ ᛟ ᚠ ᚱ ᛟ ᚷ ᛁ ᚾ ᚷ ᛫ ᛟ ᚾ ᛖ ᛫ ᛟ ᚾ ᛖ ᛫ ᚱ ᛁ ᚾ ᚷ ᛫ ᛋ ᛁ ᚷ ᚾ ᛋ ›</div>
         <div class="hero-cta">
           <a class="cta" href="mailto:lucius.haze@mail.ru" onmousemove="btnHover(event)" onmouseleave="btnLeave(event)"><span>Написать на Email</span></a>
-          <a class="ghost" href="#cv-viewer">Посмотреть резюме (PDF)</a>
+          <a class="ghost" href="#resumeLink" id="scrollToResume">Посмотреть резюме (PDF)</a>
         </div>
         <div class="grid cols-4" style="margin-top:18px">
           <div class="kpi reveal"><div class="num">12+</div><div class="cap">отчётов в проде</div></div>
@@ -990,6 +990,17 @@
 
       setMutedUI();
     })();
+
+    // Специальная обработка для кнопки "Посмотреть резюме (PDF)" в хедере
+    document.getElementById('scrollToResume').addEventListener('click', function(e) {
+      e.preventDefault();
+      const resumeLink = document.getElementById('resumeLink');
+      if (resumeLink) {
+        const y = resumeLink.getBoundingClientRect().top + window.pageYOffset - (document.querySelector('.nav')?.offsetHeight || 84);
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        closeMenu();
+      }
+    });
   </script>
 </body>
 </html>
